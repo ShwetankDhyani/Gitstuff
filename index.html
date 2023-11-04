@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bash Console Emulator</title>
+    <style>
+        body {
+            font-family: monospace;
+            background-color: #000;
+            color: #00ff00;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #console-container {
+            flex: 1;
+            overflow: auto;
+            padding: 20px;
+            margin-top: 80px; /* Adjusted margin-top to make space for the top bar */
+            box-sizing: border-box;
+            border: 2px solid #00ff00;
+            border-radius: 5px;
+        }
+
+        .command-line {
+            line-height: 1.6;
+        }
+
+        .input-command {
+            color: #00ff00; /* Set color for input command */
+        }
+
+        .output-text {
+            color: #d3d3d3; /* Set color for console output */
+        }
+
+        .terminal-bar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #111;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+            z-index: 1;
+        }
+
+        #input-container {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: #111;
+        }
+
+        #input {
+            color: #00ff00;
+            background-color: black;
+            border: 2px solid #00ff00;
+            border-radius: 5px;
+            outline: none;
+            width: calc(100% - 40px);
+            padding: 10px;
+            box-sizing: border-box;
+            font-size: 18px;
+        }
+
+        #input::placeholder {
+            color: #004400;
+            opacity: 0.8; /* Adjusted opacity to make the text more visible */
+        }
+
+        .blinking-cursor::after {
+            content: '_';
+            animation: blink 1s step-end infinite;
+            margin-top: 10px; /* Adjust the margin-top here */
+            color: #00ff00; /* Set color for blinking cursor */
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="terminal-bar">
+        <h2 class="text-light text-center">Welcome to Shwetank.cloud</h2>
+        <div class="command-line">Page under construction...</div>
+    </div>
+    <div id="console-container">
+        <div id="console">
+            <div class="command-line"><span class="blinking-cursor" <p>$ </p</span></div>
+
+            
+        </div>
+    </div>
+    <div id="input-container">
+        <input id="input" autofocus placeholder="Type 'help' for options">
+    </div>
+
+    <script>
+        const consoleDiv = document.getElementById('console');
+        const input = document.getElementById('input');
+
+        input.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                const command = input.value;
+                input.value = '';
+                consoleDiv.innerHTML += `<div class="command-line"><span class="input-command">$ ${command}</span></div>`; /* Set color for input command */
+
+                switch (command.toLowerCase()) {
+                    case 'help':
+                        consoleDiv.innerHTML += `
+                            <div class="command-line output-text"><span class="input-command">Available Commands:</span></div>
+                            <div class="command-line output-text"><span class="input-command">help -</span> Display this help text</div>
+                            <div class="command-line output-text"><span class="input-command">date -</span> Show current date and time</div>
+                            <div class="command-line output-text"><span class="input-command">ls -</span> List files and directories</div>
+                            <div class="command-line output-text"><span class="input-command">pwd -</span> Show current directory</div>
+                            <div class="command-line output-text"><span class="input-command">mkdir -</span> Create a new directory</div>
+                            <div class="command-line output-text"><span class="input-command">cd -</span> Change directory</div>
+                            <div class="command-line output-text"><span class="input-command">rm -</span> Remove file or directory</div>
+                            <div class="command-line output-text"><span class="input-command">cat -</span> Display the contents of a file</div>
+                            <div class="command-line output-text"><span class="input-command">echo -</span> Display input text</div>
+                            <!-- Add more commands and their outputs here -->
+                        `;
+                        break;
+                    case 'date':
+                        const currentDate = new Date().toLocaleString();
+                        consoleDiv.innerHTML += `<div class="command-line output-text">${currentDate}</div>`; /* Set color for console output */
+                        break;
+                    case 'ls':
+                        consoleDiv.innerHTML += `
+                            <div class="command-line output-text">file1.txt</div>
+                            <div class="command-line output-text">file2.txt</div>
+                            <div class="command-line output-text">directory1</div>
+                            <div class="command-line output-text">directory2</div>
+                        `;
+                        break;
+                    case 'pwd':
+                        consoleDiv.innerHTML += `<div class="command-line output-text">/user/documents</div>`; /* Set color for console output */
+                        break;
+                    case 'mkdir':
+                        consoleDiv.innerHTML += `<div class="command-line output-text">Directory 'new_directory' created</div>`; /* Set color for console output */
+                        break;
+                    case 'cd':
+                        consoleDiv.innerHTML += `<div class="command-line output-text">Changed directory to /user/documents</div>`; /* Set color for console output */
+                        break;
+                    case 'rm':
+                        consoleDiv.innerHTML += `<div class="command-line output-text">File 'file.txt' removed</div>`; /* Set color for console output */
+                        break;
+                    case 'cat':
+                        consoleDiv.innerHTML += `
+                            <div class="command-line output-text">Contents of file.txt:</div>
+                            <div class="command-line output-text">This is the content of the file.</div>
+                        `;
+                        break;
+                    case 'echo':
+                        consoleDiv.innerHTML += `<div class="command-line output-text">Hello, World!</div>`; /* Set color for console output */
+                        break;
+                    default:
+                        consoleDiv.innerHTML += '<div class="command-line output-text">Command not found</div>'; /* Set color for console output */
+                }
+
+                // Remove the existing blinking cursor
+                const existingCursor = document.querySelector('.blinking-cursor');
+                if (existingCursor) {
+                    existingCursor.remove();
+                }
+
+                // Add the blinking cursor after each command
+                consoleDiv.innerHTML += '<div class="command-line"><span class="blinking-cursor" <p>$ </p</span></div>'; /* Set color for blinking cursor */
+                consoleDiv.scrollTop = consoleDiv.scrollHeight;
+            }
+        });
+    </script>
+</body>
+
+</html>
